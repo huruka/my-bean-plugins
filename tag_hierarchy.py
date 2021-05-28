@@ -7,7 +7,7 @@ __plugins__ = ['tag_hierarchy']
 TagHierarchyError = namedtuple('TagHierarchyError', 'source message entry')
 
 
-def expand_hierarchy(tag: str, splited_tags: Optional[list] = None):
+def splite_tags(tag: str, splited_tags: Optional[list] = None):
     if splited_tags is None:
         splited_tags = []
     splited_tags.append(tag)
@@ -15,12 +15,12 @@ def expand_hierarchy(tag: str, splited_tags: Optional[list] = None):
     if index == -1:
         return splited_tags
     else:
-        return expand_hierarchy(tag[:index], splited_tags)
+        return splite_tags(tag[:index], splited_tags)
 
-def replace_tags(entry: namedtuple):
+def replace_tags(entry: Transaction):
     new_tags = set()
     for tag in entry.tags:
-        new_tags.update(expand_hierarchy(tag))
+        new_tags.update(splite_tags(tag))
     return entry._replace(tags=new_tags)
 
 
